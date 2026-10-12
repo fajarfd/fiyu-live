@@ -5,7 +5,7 @@ export default function App() {
   return (
     <>
       <LoginScreen />
-      <StatusBar style="dark" />
+      <StatusBar style="light" />
     </>
   );
 }

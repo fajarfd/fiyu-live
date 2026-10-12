@@ -1,10 +1,13 @@
 export const colors = {
-  primary: '#2563EB',
-  background: '#FFFFFF',
-  text: '#1F2937',
-  muted: '#6B7280',
-  border: '#D1D5DB',
-  error: '#EF4444',
+  background: '#0E1021', // Dark Space Navy
+  surface: '#1A1D38',    // Card / Input / Social background
+  primary: '#5163F0',    // Royal Blue button
+  accent: '#35D6C0',     // Mint / Teal accent for "Live" & links
+  text: '#F4F5FF',       // Clean bright text
+  muted: '#9AA0C8',      // Muted purple-gray text & icons
+  border: '#232749',     // Subtle divider line
+  error: '#FF5C7A',      // Coral pink error / decorative
+  lavender: '#6C7BFF',   // Decorative circle
 };
 
 export const spacing = {
@@ -13,4 +16,5 @@ export const spacing = {
   md: 16,
   lg: 24,
   xl: 32,
+  xxl: 40,
 };

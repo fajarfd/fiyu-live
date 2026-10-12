@@ -1,50 +1,42 @@
-import { StyleSheet, Text, TextInput, TextInputProps, View } from 'react-native';
-import { colors, spacing } from '../theme';
+import React from 'react';
+import {
+  Text,
+  TextInput,
+  TextInputProps,
+  View,
+} from 'react-native';
+import { colors } from '../theme';
+import { styles } from './AppInput.styles';
 
 type Props = TextInputProps & {
-  label: string;
+  label?: string;
   error?: string;
+  leftIcon?: React.ReactNode;
+  rightIcon?: React.ReactNode;
 };
 
-export default function AppInput({ label, error, style, ...rest }: Props) {
+export default function AppInput({
+  label,
+  error,
+  leftIcon,
+  rightIcon,
+  style,
+  ...rest
+}: Props) {
   return (
     <View style={styles.wrapper}>
-      <Text style={styles.label}>{label}</Text>
-      <TextInput
-        placeholderTextColor={colors.muted}
-        style={[styles.input, error ? styles.inputError : null, style]}
-        {...rest}
-      />
+      {label ? <Text style={styles.label}>{label}</Text> : null}
+      <View style={[styles.fieldContainer, error ? styles.fieldError : null]}>
+        {leftIcon ? <View style={styles.iconLeft}>{leftIcon}</View> : null}
+        <TextInput
+          placeholderTextColor={colors.muted}
+          style={[styles.input, style]}
+          selectionColor={colors.accent}
+          {...rest}
+        />
+        {rightIcon ? <View style={styles.iconRight}>{rightIcon}</View> : null}
+      </View>
       {error ? <Text style={styles.error}>{error}</Text> : null}
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  wrapper: {
-    marginBottom: spacing.md,
-  },
-  label: {
-    fontSize: 14,
-    fontWeight: '500',
-    color: colors.text,
-    marginBottom: 6,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: colors.border,
-    borderRadius: 10,
-    paddingHorizontal: 14,
-    paddingVertical: 12,
-    fontSize: 16,
-    color: colors.text,
-  },
-  inputError: {
-    borderColor: colors.error,
-  },
-  error: {
-    fontSize: 12,
-    color: colors.error,
-    marginTop: 4,
-  },
-});

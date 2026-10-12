@@ -1,120 +1,144 @@
-import { useState } from 'react';
+import { Feather, FontAwesome } from '@expo/vector-icons';
+import React from 'react';
 import {
-  Alert,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
-  StyleSheet,
   Text,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import AppButton from '../components/AppButton';
 import AppInput from '../components/AppInput';
-import { colors, spacing } from '../theme';
-
-type Errors = {
-  username?: string;
-  password?: string;
-};
+import { colors } from '../theme';
+import { DECORATIVE_BUBBLES, styles } from './LoginScreen.styles';
+import { useLoginScreen } from './useLoginScreen';
 
 export default function LoginScreen() {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [errors, setErrors] = useState<Errors>({});
-
-  const validate = (): boolean => {
-    const newErrors: Errors = {};
-
-    if (username.trim().length === 0) {
-      newErrors.username = 'Nama pengguna wajib diisi';
-    }
-    if (password.length < 6) {
-      newErrors.password = 'Kata sandi minimal 6 karakter';
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleLogin = () => {
-    if (!validate()) {
-      return;
-    }
-    // Simulasi dulu. Nanti diganti pemanggilan API ke backend.
-    Alert.alert('Berhasil', `Selamat datang, ${username.trim()}!`);
-  };
+  const {
+    username,
+    password,
+    showPassword,
+    errors,
+    handleUsernameChange,
+    handlePasswordChange,
+    togglePasswordVisibility,
+    handleLogin,
+    handleForgotPassword,
+    handleGoogleLogin,
+    handlePhoneLogin,
+    handleRegister,
+  } = useLoginScreen();
 
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-    >
-      <ScrollView
-        contentContainerStyle={styles.content}
-        keyboardShouldPersistTaps="handled"
+    <View style={styles.screen}>
+      {/* Gelembung Dekoratif via Loop Ringkas */}
+      {DECORATIVE_BUBBLES.map((bubble) => (
+        <View key={bubble.key} style={[styles.bubbleBase, bubble]} />
+      ))}
+
+      <KeyboardAvoidingView
+        style={styles.keyboardView}
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       >
-        <View style={styles.header}>
-          <Text style={styles.logo}>Fiyu Live</Text>
-          <Text style={styles.subtitle}>Masuk untuk mulai ngobrol</Text>
-        </View>
+        <ScrollView
+          contentContainerStyle={styles.content}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+        >
+          {/* Header Brand */}
+          <View style={styles.header}>
+            <View style={styles.logoBadge}>
+              <Feather name="radio" size={28} color={colors.background} />
+            </View>
 
-        <AppInput
-          label="Nama pengguna"
-          placeholder="contoh: fajar"
-          value={username}
-          onChangeText={setUsername}
-          autoCapitalize="none"
-          error={errors.username}
-        />
-        <AppInput
-          label="Kata sandi"
-          placeholder="Minimal 6 karakter"
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry
-          error={errors.password}
-        />
+            <Text style={styles.brandTitle}>
+              Fiyu <Text style={styles.brandHighlight}>Live</Text>
+            </Text>
+            <Text style={styles.subtitle}>
+              Ngobrol, dengar, dan bagi cerita{'\n'}secara live bersama teman baru.
+            </Text>
+          </View>
 
-        <View style={styles.buttonWrapper}>
-          <AppButton title="Masuk" onPress={handleLogin} />
-        </View>
+          {/* Form Input */}
+          <View style={styles.form}>
+            <AppInput
+              placeholder="Nama pengguna"
+              value={username}
+              onChangeText={handleUsernameChange}
+              autoCapitalize="none"
+              error={errors.username}
+              leftIcon={<Feather name="user" size={18} color={colors.muted} />}
+            />
 
-        <Text style={styles.footer}>Belum punya akun? Daftar</Text>
-      </ScrollView>
-    </KeyboardAvoidingView>
+            <AppInput
+              placeholder="Kata sandi"
+              value={password}
+              onChangeText={handlePasswordChange}
+              secureTextEntry={!showPassword}
+              error={errors.password}
+              leftIcon={<Feather name="lock" size={18} color={colors.muted} />}
+              rightIcon={
+                <TouchableOpacity
+                  onPress={togglePasswordVisibility}
+                  hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                >
+                  <Feather
+                    name={showPassword ? 'eye' : 'eye-off'}
+                    size={18}
+                    color={colors.muted}
+                  />
+                </TouchableOpacity>
+              }
+            />
+
+            <TouchableOpacity
+              onPress={handleForgotPassword}
+              style={styles.forgotWrapper}
+            >
+              <Text style={styles.forgotText}>Lupa kata sandi?</Text>
+            </TouchableOpacity>
+
+            <AppButton title="Masuk" onPress={handleLogin} />
+          </View>
+
+          {/* Divider */}
+          <View style={styles.dividerContainer}>
+            <View style={styles.dividerLine} />
+            <Text style={styles.dividerText}>atau masuk dengan</Text>
+            <View style={styles.dividerLine} />
+          </View>
+
+          {/* Tombol Login Alternatif */}
+          <View style={styles.socialRow}>
+            <AppButton
+              variant="social"
+              title="Google"
+              icon={<FontAwesome name="google" size={16} color={colors.text} />}
+              onPress={handleGoogleLogin}
+            />
+            <AppButton
+              variant="social"
+              title="Nomor HP"
+              icon={<Feather name="smartphone" size={17} color={colors.text} />}
+              onPress={handlePhoneLogin}
+            />
+          </View>
+
+          {/* Footer */}
+          <View style={styles.footerContainer}>
+            <Text style={styles.signupText}>
+              Belum punya akun?{' '}
+              <Text style={styles.signupLink} onPress={handleRegister}>
+                Daftar
+              </Text>
+            </Text>
+            <Text style={styles.termsText}>
+              Dengan masuk, kamu menyetujui Ketentuan Layanan{'\n'}dan Kebijakan Privasi Fiyu Live.
+            </Text>
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.background,
-  },
-  content: {
-    flexGrow: 1,
-    justifyContent: 'center',
-    padding: spacing.lg,
-  },
-  header: {
-    alignItems: 'center',
-    marginBottom: spacing.xl,
-  },
-  logo: {
-    fontSize: 36,
-    fontWeight: '700',
-    color: colors.primary,
-  },
-  subtitle: {
-    fontSize: 14,
-    color: colors.muted,
-    marginTop: spacing.sm,
-  },
-  buttonWrapper: {
-    marginTop: spacing.sm,
-  },
-  footer: {
-    textAlign: 'center',
-    color: colors.muted,
-    marginTop: spacing.lg,
-  },
-});
