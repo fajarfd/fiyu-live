@@ -7,7 +7,13 @@ export const colors = {
   muted: '#9AA0C8',      // Muted purple-gray text & icons
   border: '#232749',     // Subtle divider line
   error: '#FF5C7A',      // Coral pink error / decorative
-  lavender: '#6C7BFF',   // Decorative circle
+  lavender: '#6C7BFF',   // Decorative circle / Primary brand active
+  navBackground: '#141731', // Deep navy for bottom navigation
+  bannerBackground: '#232749', // Banner card background
+  liveBadge: '#FF5C7A',  // Live indicator badge
+  avatarOrange: '#FFB86B', // Amber avatar color
+  avatarPurple: '#C79BFF', // Purple avatar color
+  selectedSurface: '#2E3566', // Selected gift card background
 };
 
 export const spacing = {

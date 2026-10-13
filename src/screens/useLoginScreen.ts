@@ -6,7 +6,21 @@ export type FormErrors = {
   password?: string;
 };
 
-export function useLoginScreen() {
+type Props = {
+  onNavigateToRegister?: () => void;
+  onNavigateToForgotPassword?: () => void;
+  onNavigateToPhoneLogin?: () => void;
+  onNavigateToGoogleLogin?: () => void;
+  onNavigateToHome?: () => void;
+};
+
+export function useLoginScreen({
+  onNavigateToRegister,
+  onNavigateToForgotPassword,
+  onNavigateToPhoneLogin,
+  onNavigateToGoogleLogin,
+  onNavigateToHome,
+}: Props = {}) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -28,7 +42,11 @@ export function useLoginScreen() {
 
   const handleLogin = () => {
     if (!validate()) return;
-    Alert.alert('Berhasil', `Selamat datang, ${username.trim()}!`);
+    if (onNavigateToHome) {
+      onNavigateToHome();
+    } else {
+      Alert.alert('Berhasil', `Selamat datang, ${username.trim()}!`);
+    }
   };
 
   const handleUsernameChange = (text: string) => {
@@ -50,19 +68,35 @@ export function useLoginScreen() {
   };
 
   const handleForgotPassword = () => {
-    Alert.alert('Lupa Kata Sandi', 'Fitur reset sandi akan segera hadir.');
+    if (onNavigateToForgotPassword) {
+      onNavigateToForgotPassword();
+    } else {
+      Alert.alert('Lupa Kata Sandi', 'Fitur reset sandi akan segera hadir.');
+    }
   };
 
   const handleGoogleLogin = () => {
-    Alert.alert('Login Google', 'Masuk dengan akun Google...');
+    if (onNavigateToGoogleLogin) {
+      onNavigateToGoogleLogin();
+    } else {
+      Alert.alert('Login Google', 'Masuk dengan akun Google...');
+    }
   };
 
   const handlePhoneLogin = () => {
-    Alert.alert('Login Nomor HP', 'Masuk dengan Nomor HP...');
+    if (onNavigateToPhoneLogin) {
+      onNavigateToPhoneLogin();
+    } else {
+      Alert.alert('Login Nomor HP', 'Masuk dengan Nomor HP...');
+    }
   };
 
   const handleRegister = () => {
-    Alert.alert('Daftar', 'Navigasi ke formulir pendaftaran...');
+    if (onNavigateToRegister) {
+      onNavigateToRegister();
+    } else {
+      Alert.alert('Daftar', 'Navigasi ke formulir pendaftaran...');
+    }
   };
 
   return {

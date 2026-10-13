@@ -14,7 +14,21 @@ import { colors } from '../theme';
 import { DECORATIVE_BUBBLES, styles } from './LoginScreen.styles';
 import { useLoginScreen } from './useLoginScreen';
 
-export default function LoginScreen() {
+type Props = {
+  onNavigateToRegister?: () => void;
+  onNavigateToForgotPassword?: () => void;
+  onNavigateToPhoneLogin?: () => void;
+  onNavigateToGoogleLogin?: () => void;
+  onNavigateToHome?: () => void;
+};
+
+export default function LoginScreen({
+  onNavigateToRegister,
+  onNavigateToForgotPassword,
+  onNavigateToPhoneLogin,
+  onNavigateToGoogleLogin,
+  onNavigateToHome,
+}: Props = {}) {
   const {
     username,
     password,
@@ -28,7 +42,13 @@ export default function LoginScreen() {
     handleGoogleLogin,
     handlePhoneLogin,
     handleRegister,
-  } = useLoginScreen();
+  } = useLoginScreen({
+    onNavigateToRegister,
+    onNavigateToForgotPassword,
+    onNavigateToPhoneLogin,
+    onNavigateToGoogleLogin,
+    onNavigateToHome,
+  });
 
   return (
     <View style={styles.screen}>
